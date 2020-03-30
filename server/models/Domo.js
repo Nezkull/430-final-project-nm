@@ -16,19 +16,19 @@ const DomoSchema = new mongoose.Schema({
     trim: true,
     set: setName,
   },
-    
+
   age: {
     type: Number,
     min: 0,
     required: true,
   },
-    
+
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
     ref: 'Account',
   },
-    
+
   createdData: {
     type: Date,
     default: Date.now,
