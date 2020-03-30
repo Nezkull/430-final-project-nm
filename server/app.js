@@ -37,7 +37,8 @@ let redisPASS = '8Ftli8bKs6WUoSnIVFKJy7vu5bpDWuuO';
 
 if (process.env.REDISCLOUD_URL) {
   redisURL = url.parse(process.env.REDISCLOUD_URL);
-  redisPASS = redisURL.auth.split(':')[1];
+  const passIndex = 1;
+  redisPASS = redisURL.auth.split(':')[passIndex];
 }
 
 const redisClient = redis.createClient({
@@ -63,9 +64,6 @@ app.use(session({
   key: 'sessionid',
   store: new RedisStore({
     client: redisClient,
-      // host: redisURL.hostname,
-    // port: redisURL.port,
-    // pass: redisPASS,
   }),
   secret: 'Domo Arigato',
   resave: true,
