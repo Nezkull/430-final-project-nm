@@ -35,7 +35,7 @@ const DomoForm = (props) => {
 };
 
 const DomoList = function(props) {
-    if(props.domos.Length === 0){
+    if(props.domos.length === 0){
         return (
             <div className="domoList">
                 <h3 className="emptyDomo">No Domos yet</h3>

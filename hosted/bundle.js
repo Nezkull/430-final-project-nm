@@ -52,7 +52,7 @@ var DomoForm = function DomoForm(props) {
 };
 
 var DomoList = function DomoList(props) {
-  if (props.domos.Length === 0) {
+  if (props.domos.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
         className: "domoList"
       }, /*#__PURE__*/React.createElement("h3", {
