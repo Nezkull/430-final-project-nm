@@ -6,7 +6,7 @@ var handleDomo = function handleDomo(e) {
     width: 'hide'
   }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
@@ -15,6 +15,27 @@ var handleDomo = function handleDomo(e) {
     loadDomosFromServer();
   });
   return false;
+}; // called if domo node is clicked, change later to load from a random poem form a set connected to account maybe?
+// the spacing is wrong for the poem. I'm not sure why it isn't splitting into new lines but I have tried several different ways to do it and none have worked 
+
+
+var domoPoem = function domoPoem(e) {
+  e.preventDefault(); // handleError(`${domo.name} has a poem for you.\nCreating haiku\nIs harder than it appears\nWill take a while`);
+  // handleError("  Creating haiku     \r\n  Is harder than it appears   \r\n  Will take a while");
+  // handleError(lineBreaker("Creating haiku\nIs harder than it appears\nWill take a while"));
+  // handleError(`Creating haiku<br/>Is harder than it appears<br/>Will take a while`)
+
+  handleError("Creating haiku. \nIs harder than it appears. \nWill take a while.");
+  return false;
+};
+
+var lineBreaker = function lineBreaker(content) {
+  content.props.text.split('\n').map(function (item, key) {
+    return (/*#__PURE__*/React.createElement(Fragment, {
+        key: key
+      }, item, /*#__PURE__*/React.createElement("br", null))
+    );
+  });
 };
 
 var DomoForm = function DomoForm(props) {
@@ -39,6 +60,13 @@ var DomoForm = function DomoForm(props) {
       type: "text",
       name: "age",
       placeholder: "Domo Age"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "level"
+    }, "Level: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoLevel",
+      type: "text",
+      name: "level",
+      placeholder: "Domo Level"
     }), /*#__PURE__*/React.createElement("input", {
       type: "hidden",
       name: "_csrf",
@@ -64,7 +92,8 @@ var DomoList = function DomoList(props) {
   var domoNodes = props.domos.map(function (domo) {
     return (/*#__PURE__*/React.createElement("div", {
         key: domo._id,
-        className: "domo"
+        className: "domo",
+        onClick: domoPoem
       }, /*#__PURE__*/React.createElement("img", {
         src: "/assets/img/domoface.jpeg",
         alt: "domo face",
@@ -73,7 +102,9 @@ var DomoList = function DomoList(props) {
         className: "domoName"
       }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
         className: "domoAge"
-      }, " Age: ", domo.age, " "))
+      }, " Age: ", domo.age, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "domoLevel"
+      }, " Level: ", domo.level, " "))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {

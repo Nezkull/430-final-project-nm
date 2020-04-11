@@ -97,6 +97,5 @@ const getToken = (request, response) => {
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
-// module.exports.signupPage = signupPage;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
