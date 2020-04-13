@@ -1,108 +1,122 @@
-const handleDomo = (e) => {
+const handleAccount = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({width: 'hide'}, 350);
-    
-    if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == ''){
-        handleError("RAWR! All fields are required");
+    if($("#accountName").val() == '' || $("#username").val() == '' || $("#pasword").val() == ''){
+        handleError("All fields are required");
         return false;
     }
     
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
-        loadDomosFromServer();
+    sendAjax('POST', $("#accountForm").attr("action"), $("#accountForm").serialize(), function() {
+        loadAccountsFromServer();
     });
     
     return false;
 };
 
-// called if domo node is clicked, change later to load from a random poem form a set connected to account maybe?
-// the spacing is wrong for the poem. I'm not sure why it isn't splitting into new lines but I have tried several different ways to do it and none have worked 
-const domoPoem = (e) => {
-    e.preventDefault();
-    
-    // handleError(`${domo.name} has a poem for you.\nCreating haiku\nIs harder than it appears\nWill take a while`);
-    // handleError("  Creating haiku     \r\n  Is harder than it appears   \r\n  Will take a while");
-    // handleError(lineBreaker("Creating haiku\nIs harder than it appears\nWill take a while"));
-    // handleError(`Creating haiku<br/>Is harder than it appears<br/>Will take a while`)
-    handleError("Creating haiku. \nIs harder than it appears. \nWill take a while.");
-
-    return false;
-};
-
-
-const lineBreaker = (content) => {
-    content.props.text.split('\n').map((item, key) => {
-    return <Fragment key={key}>{item}<br/></Fragment>
-})};
-
-const DomoForm = (props) => {
+const AccountForm = (props) => {
     return (
-        <form id="domoForm"
-            onSubmit={handleDomo}
-            name="domoForm"
+        <form id="accountForm"
+            onSubmit={handleAccount}
+            name="accountForm"
             action="/maker"
             method="POST"
-            className="domoForm"
+            className="accountForm"
         >
+            <select id="image" onChange={testFunc}>
+                <option value="/assets/img/originIcon.jpg">Origin</option>
+                <option value="/assets/img/steamIcon.png">Steam</option>
+                <option value="/assets/img/epicIcon.png">Epic</option>
+            </select>
             <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
-            <label htmlFor="level">Level: </label>
-            <input id="domoLevel" type="text" name="level" placeholder="Domo Level"/>
+            <input id="accountName" type="text" name="name" placeholder="Account Name"/>
+            <label htmlFor="head">Username: </label>
+            <input id="username" type="text" name="username" placeholder="Username"/>
+            <label htmlFor="password">Password: </label>
+            <input id="password" type="text" name="password" placeholder="Password"/>
+            <label htmlFor="email">Email: </label>
+            <input id="email" type="text" name="email" placeholder="Email"/>
             <input type="hidden" name="_csrf" value={props.csrf}/>
-            <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
+            <input className="makeAccountSubmit" type="submit" value="Make Account"/>
         </form>
     );
 };
 
+// I'm planning on using this to load different account submission forms, email or other. OR do something entirely different with this
+const testFunc = (e) => {
+  e.preventDefault();
+    
+  let x = document.getElementById('image').value;
+  alert("Selected: " + x);
+};
 
+// this will render the info for specific account so username, password, and email are visible, from this I'm planning on having each account have a settings, info can be changed or deleted entirely
+// will add another button to the form, this will allow user to edit content
+const accountInfo = (node, e) => {
+    e.preventDefault();
+    
+    ReactDOM.render(
+        <NodeInfo node={node} />, document.querySelector("#nodes")
+    );
+};
 
-const DomoList = function(props) {
-    if(props.domos.length === 0){
+const NodeInfo = (node) => {
+    return (
+        <div className="nodeInfo">
+            <h2 className="nodeName">{node.name}</h2>
+            <img src="/assets/img/steamIcon.png" alt="infoNodeImage" className="infoNodeImage"/>
+            <h3 className="username"> Username:{node.username}</h3>
+            <h3 className="password"> Password:{node.password}</h3>
+            <h3 className="email"> Email:{node.email}</h3>
+            <h3 className="image"> image:{node.image}</h3>
+            <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
+        </div>
+    );
+};
+
+const AccountList = function(props) {
+    if(props.accounts.length === 0){
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos yet</h3>
+            <div className="accountList">
+                <h3 className="emptyAccount">No Accounts yet</h3>
             </div>
         );
     }
     
-    const domoNodes = props.domos.map(function(domo) {
+    const accountNodes = props.accounts.map(function(account) {
         return (
-            <div key={domo._id} className="domo" onClick={domoPoem}>
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace"/>
-                <h3 className="domoName"> Name: {domo.name} </h3>
-                <h3 className="domoAge"> Age: {domo.age} </h3>
-                <h3 className="domoLevel"> Level: {domo.level} </h3>
+            <div key={account._id} className="account" onClick={(e) => accountInfo(account, e)}>
+                <img src="/assets/img/steamIcon.png" alt="steamIcon" className="nodeImage" height="300" width="300"/>
+                <h3 className="accountName"> Name:{account.name} </h3>
             </div>
         );
     });
     
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div className="accountList">
+            {accountNodes}
         </div>
     );
 };
 
-const loadDomosFromServer = () => {
-    sendAjax('GET', '/getDomos', null, (data) => {
+const loadAccountsFromServer = () => {
+    sendAjax('GET', '/getNodes', null, (data) => {
         ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector("#domos")
+            <AccountList accounts={data.accounts} />, document.querySelector("#nodes")
         );
     });
 };
 
+// will be similar probably
 const setup = function(csrf) {
     ReactDOM.render(
-        <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
+        <AccountForm csrf={csrf} />, document.querySelector("#createNode")
     );
     
     ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector("#domos")
+        <AccountList accounts={[]} />, document.querySelector("#nodes")
     );
     
-    loadDomosFromServer();
+    loadAccountsFromServer();
 };
 
 const getToken = () => {

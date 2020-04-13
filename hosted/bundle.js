@@ -1,134 +1,169 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
+var handleAccount = function handleAccount(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
-    handleError("RAWR! All fields are required");
+  if ($("#accountName").val() == '' || $("#username").val() == '' || $("#pasword").val() == '') {
+    handleError("All fields are required");
     return false;
   }
 
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('POST', $("#accountForm").attr("action"), $("#accountForm").serialize(), function () {
+    loadAccountsFromServer();
   });
-  return false;
-}; // called if domo node is clicked, change later to load from a random poem form a set connected to account maybe?
-// the spacing is wrong for the poem. I'm not sure why it isn't splitting into new lines but I have tried several different ways to do it and none have worked 
-
-
-var domoPoem = function domoPoem(e) {
-  e.preventDefault(); // handleError(`${domo.name} has a poem for you.\nCreating haiku\nIs harder than it appears\nWill take a while`);
-  // handleError("  Creating haiku     \r\n  Is harder than it appears   \r\n  Will take a while");
-  // handleError(lineBreaker("Creating haiku\nIs harder than it appears\nWill take a while"));
-  // handleError(`Creating haiku<br/>Is harder than it appears<br/>Will take a while`)
-
-  handleError("Creating haiku. \nIs harder than it appears. \nWill take a while.");
   return false;
 };
 
-var lineBreaker = function lineBreaker(content) {
-  content.props.text.split('\n').map(function (item, key) {
-    return (/*#__PURE__*/React.createElement(Fragment, {
-        key: key
-      }, item, /*#__PURE__*/React.createElement("br", null))
-    );
-  });
-};
-
-var DomoForm = function DomoForm(props) {
+var AccountForm = function AccountForm(props) {
   return (/*#__PURE__*/React.createElement("form", {
-      id: "domoForm",
-      onSubmit: handleDomo,
-      name: "domoForm",
+      id: "accountForm",
+      onSubmit: handleAccount,
+      name: "accountForm",
       action: "/maker",
       method: "POST",
-      className: "domoForm"
-    }, /*#__PURE__*/React.createElement("label", {
+      className: "accountForm"
+    }, /*#__PURE__*/React.createElement("select", {
+      id: "image",
+      onChange: testFunc
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "/assets/img/originIcon.jpg"
+    }, "Origin"), /*#__PURE__*/React.createElement("option", {
+      value: "/assets/img/steamIcon.png"
+    }, "Steam"), /*#__PURE__*/React.createElement("option", {
+      value: "/assets/img/epicIcon.png"
+    }, "Epic")), /*#__PURE__*/React.createElement("label", {
       htmlFor: "name"
     }, "Name: "), /*#__PURE__*/React.createElement("input", {
-      id: "domoName",
+      id: "accountName",
       type: "text",
       name: "name",
-      placeholder: "Domo Name"
+      placeholder: "Account Name"
     }), /*#__PURE__*/React.createElement("label", {
-      htmlFor: "age"
-    }, "Age: "), /*#__PURE__*/React.createElement("input", {
-      id: "domoAge",
+      htmlFor: "head"
+    }, "Username: "), /*#__PURE__*/React.createElement("input", {
+      id: "username",
       type: "text",
-      name: "age",
-      placeholder: "Domo Age"
+      name: "username",
+      placeholder: "Username"
     }), /*#__PURE__*/React.createElement("label", {
-      htmlFor: "level"
-    }, "Level: "), /*#__PURE__*/React.createElement("input", {
-      id: "domoLevel",
+      htmlFor: "password"
+    }, "Password: "), /*#__PURE__*/React.createElement("input", {
+      id: "password",
       type: "text",
-      name: "level",
-      placeholder: "Domo Level"
+      name: "password",
+      placeholder: "Password"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "email"
+    }, "Email: "), /*#__PURE__*/React.createElement("input", {
+      id: "email",
+      type: "text",
+      name: "email",
+      placeholder: "Email"
     }), /*#__PURE__*/React.createElement("input", {
       type: "hidden",
       name: "_csrf",
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
-      className: "makeDomoSubmit",
+      className: "makeAccountSubmit",
       type: "submit",
-      value: "Make Domo"
+      value: "Make Account"
+    }))
+  );
+}; // I'm planning on using this to load different account submission forms, email or other. OR do something entirely different with this
+
+
+var testFunc = function testFunc(e) {
+  e.preventDefault();
+  var x = document.getElementById('image').value;
+  alert("Selected: " + x);
+}; // this will render the info for specific account so username, password, and email are visible, from this I'm planning on having each account have a settings, info can be changed or deleted entirely
+// will add another button to the form, this will allow user to edit content
+
+
+var accountInfo = function accountInfo(node, e) {
+  e.preventDefault();
+  ReactDOM.render( /*#__PURE__*/React.createElement(NodeInfo, {
+    node: node
+  }), document.querySelector("#nodes"));
+};
+
+var NodeInfo = function NodeInfo(node) {
+  return (/*#__PURE__*/React.createElement("div", {
+      className: "nodeInfo"
+    }, /*#__PURE__*/React.createElement("h2", {
+      className: "nodeName"
+    }, node.name), /*#__PURE__*/React.createElement("img", {
+      src: "/assets/img/steamIcon.png",
+      alt: "infoNodeImage",
+      className: "infoNodeImage"
+    }), /*#__PURE__*/React.createElement("h3", {
+      className: "username"
+    }, " Username:", node.username), /*#__PURE__*/React.createElement("h3", {
+      className: "password"
+    }, " Password:", node.password), /*#__PURE__*/React.createElement("h3", {
+      className: "email"
+    }, " Email:", node.email), /*#__PURE__*/React.createElement("h3", {
+      className: "image"
+    }, " image:", node.image), /*#__PURE__*/React.createElement("input", {
+      className: "closeButton",
+      type: "button",
+      value: "Close",
+      onClick: loadAccountsFromServer
     }))
   );
 };
 
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+var AccountList = function AccountList(props) {
+  if (props.accounts.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
-        className: "domoList"
+        className: "accountList"
       }, /*#__PURE__*/React.createElement("h3", {
-        className: "emptyDomo"
-      }, "No Domos yet"))
+        className: "emptyAccount"
+      }, "No Accounts yet"))
     );
   }
 
-  var domoNodes = props.domos.map(function (domo) {
+  var accountNodes = props.accounts.map(function (account) {
     return (/*#__PURE__*/React.createElement("div", {
-        key: domo._id,
-        className: "domo",
-        onClick: domoPoem
+        key: account._id,
+        className: "account",
+        onClick: function onClick(e) {
+          return accountInfo(account, e);
+        }
       }, /*#__PURE__*/React.createElement("img", {
-        src: "/assets/img/domoface.jpeg",
-        alt: "domo face",
-        className: "domoFace"
+        src: "/assets/img/steamIcon.png",
+        alt: "steamIcon",
+        className: "nodeImage",
+        height: "300",
+        width: "300"
       }), /*#__PURE__*/React.createElement("h3", {
-        className: "domoName"
-      }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
-        className: "domoAge"
-      }, " Age: ", domo.age, " "), /*#__PURE__*/React.createElement("h3", {
-        className: "domoLevel"
-      }, " Level: ", domo.level, " "))
+        className: "accountName"
+      }, " Name:", account.name, " "))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {
-      className: "domoList"
-    }, domoNodes)
+      className: "accountList"
+    }, accountNodes)
   );
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-      domos: data.domos
-    }), document.querySelector("#domos"));
+var loadAccountsFromServer = function loadAccountsFromServer() {
+  sendAjax('GET', '/getNodes', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(AccountList, {
+      accounts: data.accounts
+    }), document.querySelector("#nodes"));
   });
-};
+}; // will be similar probably
+
 
 var setup = function setup(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(AccountForm, {
     csrf: csrf
-  }), document.querySelector("#makeDomo"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-    domos: []
-  }), document.querySelector("#domos"));
-  loadDomosFromServer();
+  }), document.querySelector("#createNode"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(AccountList, {
+    accounts: []
+  }), document.querySelector("#nodes"));
+  loadAccountsFromServer();
 };
 
 var getToken = function getToken() {
@@ -142,19 +177,22 @@ $(document).ready(function () {
 });
 "use strict";
 
+// not sure if ill need this, probably won't
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#message").animate({
     width: 'toggle'
   }, 350);
-};
+}; // need this
+
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#message").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;
-};
+}; // need this
+
 
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({

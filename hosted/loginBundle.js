@@ -150,19 +150,22 @@ $(document).ready(function () {
 });
 "use strict";
 
+// not sure if ill need this, probably won't
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#message").animate({
     width: 'toggle'
   }, 350);
-};
+}; // need this
+
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#message").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;
-};
+}; // need this
+
 
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({
