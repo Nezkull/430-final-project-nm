@@ -51,23 +51,24 @@ const testFunc = (e) => {
 
 // this will render the info for specific account so username, password, and email are visible, from this I'm planning on having each account have a settings, info can be changed or deleted entirely
 // will add another button to the form, this will allow user to edit content
-const accountInfo = (node, e) => {
+const accountInfo = (account, e) => {
     e.preventDefault();
-    
+    console.log("Name: " + account.name + "Email: " + account.email);
     ReactDOM.render(
-        <NodeInfo node={node} />, document.querySelector("#nodes")
+        <NodeInfo node={account} />, document.querySelector("#nodes")
     );
 };
 
-const NodeInfo = (node) => {
+const NodeInfo = (account) => {
+    console.log("Name: " + account.name + "Email: " + account.email);
     return (
         <div className="nodeInfo">
-            <h2 className="nodeName">{node.name}</h2>
+            <h2 className="nodeName">{account.name}</h2>
             <img src="/assets/img/steamIcon.png" alt="infoNodeImage" className="infoNodeImage"/>
-            <h3 className="username"> Username:{node.username}</h3>
-            <h3 className="password"> Password:{node.password}</h3>
-            <h3 className="email"> Email:{node.email}</h3>
-            <h3 className="image"> image:{node.image}</h3>
+            <h3 className="username"> Username:{account.username} </h3>
+            <h3 className="password"> Password:{account.password} </h3>
+            <h3 className="email"> Email:{account.email} </h3>
+            <h3 className="image"> image:{account.image} </h3>
             <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
         </div>
     );

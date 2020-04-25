@@ -80,31 +80,33 @@ var testFunc = function testFunc(e) {
 // will add another button to the form, this will allow user to edit content
 
 
-var accountInfo = function accountInfo(node, e) {
+var accountInfo = function accountInfo(account, e) {
   e.preventDefault();
+  console.log("Name: " + account.name + "Email: " + account.email);
   ReactDOM.render( /*#__PURE__*/React.createElement(NodeInfo, {
-    node: node
+    node: account
   }), document.querySelector("#nodes"));
 };
 
-var NodeInfo = function NodeInfo(node) {
+var NodeInfo = function NodeInfo(account) {
+  console.log("Name: " + account.name + "Email: " + account.email);
   return (/*#__PURE__*/React.createElement("div", {
       className: "nodeInfo"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "nodeName"
-    }, node.name), /*#__PURE__*/React.createElement("img", {
+    }, account.name), /*#__PURE__*/React.createElement("img", {
       src: "/assets/img/steamIcon.png",
       alt: "infoNodeImage",
       className: "infoNodeImage"
     }), /*#__PURE__*/React.createElement("h3", {
       className: "username"
-    }, " Username:", node.username), /*#__PURE__*/React.createElement("h3", {
+    }, " Username:", account.username, " "), /*#__PURE__*/React.createElement("h3", {
       className: "password"
-    }, " Password:", node.password), /*#__PURE__*/React.createElement("h3", {
+    }, " Password:", account.password, " "), /*#__PURE__*/React.createElement("h3", {
       className: "email"
-    }, " Email:", node.email), /*#__PURE__*/React.createElement("h3", {
+    }, " Email:", account.email, " "), /*#__PURE__*/React.createElement("h3", {
       className: "image"
-    }, " image:", node.image), /*#__PURE__*/React.createElement("input", {
+    }, " image:", account.image, " "), /*#__PURE__*/React.createElement("input", {
       className: "closeButton",
       type: "button",
       value: "Close",
