@@ -1,10 +1,10 @@
 const handleLogin = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({wisdth:'hide'},350);
+    // $("#domoMessage").animate({wisdth:'hide'},350);
     
     if($("#user").val() == '' || $("#pass").val() == ''){
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty");
         return false;
     }
     
@@ -18,15 +18,15 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({width:'hide'}, 350);
+    // $("#domoMessage").animate({width:'hide'}, 350);
     
     if($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == ''){
-        handleError("RAWR! All fields are required");
+        handleError("All fields are required");
         return false;
     }
     
     if($("#pass").val() !== $("#pass2").val()){
-        handleError("RAWR! Passwords do not match");
+        handleError("Passwords do not match");
         return false;
     }
     
@@ -53,7 +53,15 @@ const LoginWindow = (props) => {
     </form>
     );
 };
-
+/*
+const AccountWindow = (props) => {
+  return (
+    <div className="userAccount">
+        <h3 className="username">TEMP</h3>
+    </div>
+  );  
+};
+*/
 const SignupWindow = (props) => {
     return (
     <form id="signupForm"
@@ -74,6 +82,8 @@ const SignupWindow = (props) => {
     </form>
     );
 };
+
+
 
 const createLoginWindow = (csrf) => {
     ReactDOM.render(

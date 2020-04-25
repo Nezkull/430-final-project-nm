@@ -55,11 +55,11 @@ const accountInfo = (account, e) => {
     e.preventDefault();
     console.log("Name: " + account.name + "Email: " + account.email);
     ReactDOM.render(
-        <NodeInfo node={account} />, document.querySelector("#nodes")
+        <NodeInfo account={account} />, document.querySelector("#nodes")
     );
 };
 
-const NodeInfo = (account) => {
+const NodeInfo = ({account}) => {
     console.log("Name: " + account.name + "Email: " + account.email);
     return (
         <div className="nodeInfo">

@@ -84,11 +84,12 @@ var accountInfo = function accountInfo(account, e) {
   e.preventDefault();
   console.log("Name: " + account.name + "Email: " + account.email);
   ReactDOM.render( /*#__PURE__*/React.createElement(NodeInfo, {
-    node: account
+    account: account
   }), document.querySelector("#nodes"));
 };
 
-var NodeInfo = function NodeInfo(account) {
+var NodeInfo = function NodeInfo(_ref) {
+  var account = _ref.account;
   console.log("Name: " + account.name + "Email: " + account.email);
   return (/*#__PURE__*/React.createElement("div", {
       className: "nodeInfo"

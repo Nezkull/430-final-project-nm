@@ -11,6 +11,20 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+const userPage = (req, res) => {
+    // res.render('/userAccount', {csrfToken: req.csrfToken() });
+    res.render('userAccount');
+};
+
+const userAccount =(request, response) => {
+  const req = request;
+  const res = response;
+
+  req.session.account = Account.AccountModel.toAPI(account);
+    
+  return res.json({ redirect: '/userAccount' });
+};
+
 const login = (request, response) => {
   const req = request;
   const res = response;
@@ -101,6 +115,8 @@ const updatePassword = (request, response) => {
 };
 */
 
+
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -117,3 +133,5 @@ module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
+module.exports.userAccount = userAccount;
+module.exports.userPage = userPage;
