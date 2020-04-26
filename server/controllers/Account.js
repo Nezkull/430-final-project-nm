@@ -96,74 +96,65 @@ const signup = (request, response) => {
 };
 
 // change password code
-/*
+
 const changePassword = (request, response) => {
   const req = request;
   const res = response;
 
-  // i guess i cna get away with only haveing one new password value
+  // i guess i cna get away with only haveing one new password value, if i do the username check,
+  // it might allow someone to change someone elses password, maybe?
+  // req.body.username = `${req.body.username}`;
   req.body.pass = `${req.body.pass}`;
   req.body.newPass1 = `${req.body.newPass1}`;
-  req.body.newPass2 = `${req.body.newPass2}`;
 
-  if (!req.body.pass || !req.body.newPass1 || !req.body.newPass2) {
+  if (!req.body.pass || !req.body.newPass1) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  if (req.body.newPass1 !== req.body.newPass2) {
-    return res.status(400).json({ error: 'New passwords do not match' });
-  }
+  return Account.AccountModel.authenticate(req.session.account.username,
+    req.body.pass, (err, account) => {
+      if (err || !account) {
+        return res.status(401).json({ error: 'Wrong username or password' });
+      }
 
-  return Account.AccountModel.authenticate(username, password, (err, account) => {
-    if (err || !account) {
-      return res.status(401).json({ error: 'Wrong username or password' });
-    }
+      return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
+        // look into findOneAndUpdate or updateOne more for this I think
+        // don't ned to make a new one entirely
+        const updatedAccount = account;
+        updatedAccount.salt = salt;
+        updatedAccount.password = hash;
 
-    return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
-    // look into findOneAndUpdate or updateOne more for this I think
-    // don't ned to make a new one entirely
-      const updatedAccount = account;
-      updatedAccount.salt = salt;
-      updatedAccount.password = hash;
+        const updatedPromise = updatedAccount.save();
 
-      const updatedPromise = updatedAccount.save();
-
-      updatedPromise.then(() => {
+        updatedPromise.then(() => {
           req.session.account = Account.AccountModel.toAPI(updatedAccount);
-            return res.json({ redirect: '/maker' });
-      });
+          // the return line ill need to be changed later to redirect back to the profile page
+          return res.json({ redirect: '/maker' });
+        });
 
-      updatedPromise.catch((err) => {
-          if (err.code === 11000) {
-        return res.status(400).json({ error: 'Username already in use.' });
-      };
+        updatedPromise.catch(() => res.status(400).json({ error: 'Something went wrong.' }));
       });
-  });
-});
-*/
+    });
+};
 
 // premium account upgrade code
-/*
 const premiumMember = (request, response) => {
-    const req = request;
-    const res = response;
+  const req = request;
+  const res = response;
 
-    const userAccount = Account.AccountModel.findByUsername(req.session.account.username);
+  const userAccount = Account.AccountModel.findByUsername(req.session.account.username);
 
-    userAccount.then((account) => {
-        const updatedAccount = account;
-        updatedAccount.premiumMem = true;
-        updatedAccount.save();
+  userAccount.then((account) => {
+    const updatedAccount = account;
+    updatedAccount.premiumMem = true;
+    updatedAccount.save();
+  });
 
-    });
+  userAccount.catch(() => res.status(400).json({ error: ' An error occurred' }));
 
-    userAccount.catch((err) => {
-        return res.status(400).json({ error: ' An error occurred'});
-    });
-
-    return res.status(400).json({ error: ' An error occurred'});
+  // return res.status(400).json({ error: ' An error occurred'});
 };
-*/
+
 // maybe make a getAccount function, it kinda works but at the same time not really for some reason
 const getAccount = (request, response) => {
   const req = request;
@@ -199,6 +190,7 @@ module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.getAccount = getAccount;
+module.exports.changePassword = changePassword;
+module.exports.premiumMember = premiumMember;
 // module.exports.userAccount = userAccount;
 // module.exports.userPage = userPage;
-// module.exports.changePassword = changePassword;

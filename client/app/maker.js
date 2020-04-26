@@ -2,7 +2,7 @@ const handleAccount = (e) => {
     e.preventDefault();
     
     if($("#accountName").val() == '' || $("#username").val() == '' || $("#pasword").val() == ''){
-        handleError("All fields are required");
+        handleError("All fields are required.");
         return false;
     }
     
@@ -24,12 +24,8 @@ const UserAccount = (props) => {
 */
 const AccountForm = (props) => {
     return (
-        <form id="accountForm"
-            onSubmit={handleAccount}
-            name="accountForm"
-            action="/maker"
-            method="POST"
-            className="accountForm"
+        <form id="accountForm" onSubmit={handleAccount} name="accountForm"
+            action="/maker" method="POST" className="accountForm"
         >
             <select id="image" onChange={testFunc}>
                 <option value="/assets/img/originIcon.jpg">Origin</option>
@@ -38,7 +34,7 @@ const AccountForm = (props) => {
             </select>
             <label htmlFor="name">Name: </label>
             <input id="accountName" type="text" name="name" placeholder="Account Name"/>
-            <label htmlFor="head">Username: </label>
+            <label htmlFor="username">Username: </label>
             <input id="username" type="text" name="username" placeholder="Username"/>
             <label htmlFor="password">Password: </label>
             <input id="password" type="text" name="password" placeholder="Password"/>
@@ -50,11 +46,57 @@ const AccountForm = (props) => {
     );
 };
 
-const Profile = (account) => {
+// 
+const handlePasswordChange = (e) => {
+    e.preventDefault();
+    
+    if($("#username").val() == '' || $("#oldPass").val() == '' || $("#newPass").val() == ''){
+        handleError("all fileds are required.");
+        return false;
+    } else if($("#oldPass").val() === $("#newPass").val()){
+        handleError("A new password is required.");
+        return false;
+    }
+    
+    // update the account info
+    // I don't think that I'm supposed to use sendAjax like above
+    
+    return false;
+};
+
+// change action over to something better later
+const ChangePasswordForm = (props) => {
+    <form id="changePasswordForm" onSubmit={handlePasswordChange} name="changePasswordForm"
+        action="/maker" method="POST" className="changePasswordForm"
+     >
+    <label htmlFor="username">Username: </label>
+    <input id="username" type="text" name="username" placeholder="Username"/>
+    <label htmlFor="oldPass">Old Password: </label>
+    <input id="oldPass" type="text" name="oldPass" placeholder="Old Password"/>
+    <label htmlFor="newPass">New Password: </label>
+    <input id="newPass" type="text" name="newPass" placeholder="New Password"/>
+    <input className="makeAccountSubmit" type="submit" value="Submit New Password"/>
+    </form>
+};
+
+const Profile = (account) => {  
     return (
         <input className="userProfileButton" type="button" value="Profile Settings" onClick={(e) => userProfile(account, e)}></input>
     );
 };
+
+const PremiumMemberForm = (props) => {
+    <form id="premiumMemberForm" onSubmit={testFunc} name="premiumMemberForm"
+        action="/maker" method="POST" className="premiumMemberForm"
+    >
+        <label htmlFor="email">Email: </label>
+        <input id="email" type="email" name="email" placeholder="john.doe@hotmail.com"/>
+        <label htmlFor="phoneNum">Phone #: </label>
+        <input id="phoneNum" type="tel" name="phoneNum" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="555-555-5556"/>
+        <label htmlFor="ccNum">Credit Card: </label>
+        <input id="ccNum" type="number" name="ccNum" pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}" placeholder="5555 5555 5555 5655"/>
+    </form>
+}
 
 const userProfile =(account, e) => {
     e.preventDefault();
@@ -62,7 +104,7 @@ const userProfile =(account, e) => {
         <UserAccount account={account} />, document.querySelector("#nodes")
     );
     document.querySelector("#createNode").style.display = "none";
-    // document.querySelector("userProfileButton").style.display = "none";
+    document.querySelector("#profile").style.display = "none";
 };
 
 // maybe this renders the user profile and from there the info is shown and these options are available
@@ -100,13 +142,12 @@ const accountInfo = (account, e) => {
 const NodeInfo = ({account}) => {
     return (
         <div className="nodeInfo">
-            <h2 className="nodeName">{account.name}</h2>
-            <img src="/assets/img/steamIcon.png" alt="infoNodeImage" className="infoNodeImage"/>
-            <h3 className="username"> Username:{account.username} </h3>
-            <h3 className="password"> Password:{account.password} </h3>
-            <h3 className="email"> Email:{account.email} </h3>
-            <h3 className="image"> image:{account.image} </h3>
-            <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
+            <img src="/assets/img/steamIcon.png" alt="nodeImg" className="nodeImg"/>
+            <h1 className="nodeName">{account.name}</h1>
+            <h3 className="nodeUsername"> Username:{account.username} </h3>
+            <h3 className="nodePassword"> Password:{account.password} </h3>
+            <h3 className="nodeEmail"> Email:{account.email} </h3>
+            <input className="nodeClose" type="button" value="X" onClick={loadAccountsFromServer}/>
         </div>
     );
 };
@@ -144,7 +185,7 @@ const loadAccountsFromServer = () => {
     });
     
     document.querySelector("#createNode").style.display = "block";
-    // document.querySelector("userProfileButton").style.display = "block";
+    document.querySelector("#profile").style.display = "block";
 };
 
 const loadAccount = () => {
@@ -152,12 +193,9 @@ const loadAccount = () => {
         ReactDOM.render(
             <Profile account={account}/>, document.querySelector("#profile")
         );
-        
-        document.querySelector("#profile").style.display = "none";
     });
 };
 
-// will be similar probably
 const setup = function(csrf) {
     ReactDOM.render(
         <AccountForm csrf={csrf} />, document.querySelector("#createNode")

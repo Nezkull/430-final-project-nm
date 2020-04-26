@@ -4,7 +4,7 @@ var handleAccount = function handleAccount(e) {
   e.preventDefault();
 
   if ($("#accountName").val() == '' || $("#username").val() == '' || $("#pasword").val() == '') {
-    handleError("All fields are required");
+    handleError("All fields are required.");
     return false;
   }
 
@@ -50,7 +50,7 @@ var AccountForm = function AccountForm(props) {
       name: "name",
       placeholder: "Account Name"
     }), /*#__PURE__*/React.createElement("label", {
-      htmlFor: "head"
+      htmlFor: "username"
     }, "Username: "), /*#__PURE__*/React.createElement("input", {
       id: "username",
       type: "text",
@@ -80,6 +80,61 @@ var AccountForm = function AccountForm(props) {
       value: "Make Account"
     }))
   );
+}; // 
+
+
+var handlePasswordChange = function handlePasswordChange(e) {
+  e.preventDefault();
+
+  if ($("#username").val() == '' || $("#oldPass").val() == '' || $("#newPass").val() == '') {
+    handleError("all fileds are required.");
+    return false;
+  } else if ($("#oldPass").val() === $("#newPass").val()) {
+    handleError("A new password is required.");
+    return false;
+  } // update the account info
+  // I don't think that I'm supposed to use sendAjax like above
+
+
+  return false;
+}; // change action over to something better later
+
+
+var ChangePasswordForm = function ChangePasswordForm(props) {
+  /*#__PURE__*/
+  React.createElement("form", {
+    id: "changePasswordForm",
+    onSubmit: handlePasswordChange,
+    name: "changePasswordForm",
+    action: "/maker",
+    method: "POST",
+    className: "changePasswordForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "username"
+  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    id: "username",
+    type: "text",
+    name: "username",
+    placeholder: "Username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "oldPass"
+  }, "Old Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "oldPass",
+    type: "text",
+    name: "oldPass",
+    placeholder: "Old Password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass"
+  }, "New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass",
+    type: "text",
+    name: "newPass",
+    placeholder: "New Password"
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "makeAccountSubmit",
+    type: "submit",
+    value: "Submit New Password"
+  }));
 };
 
 var Profile = function Profile(account) {
@@ -94,12 +149,48 @@ var Profile = function Profile(account) {
   );
 };
 
+var PremiumMemberForm = function PremiumMemberForm(props) {
+  /*#__PURE__*/
+  React.createElement("form", {
+    id: "premiumMemberForm",
+    onSubmit: testFunc,
+    name: "premiumMemberForm",
+    action: "/maker",
+    method: "POST",
+    className: "premiumMemberForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "email"
+  }, "Email: "), /*#__PURE__*/React.createElement("input", {
+    id: "email",
+    type: "email",
+    name: "email",
+    placeholder: "john.doe@hotmail.com"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "phoneNum"
+  }, "Phone #: "), /*#__PURE__*/React.createElement("input", {
+    id: "phoneNum",
+    type: "tel",
+    name: "phoneNum",
+    pattern: "[0-9]{3}-[0-9]{3}-[0-9]{4}",
+    placeholder: "555-555-5556"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "ccNum"
+  }, "Credit Card: "), /*#__PURE__*/React.createElement("input", {
+    id: "ccNum",
+    type: "number",
+    name: "ccNum",
+    pattern: "[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}",
+    placeholder: "5555 5555 5555 5655"
+  }));
+};
+
 var userProfile = function userProfile(account, e) {
   e.preventDefault();
   ReactDOM.render( /*#__PURE__*/React.createElement(UserAccount, {
     account: account
   }), document.querySelector("#nodes"));
-  document.querySelector("#createNode").style.display = "none"; // document.querySelector("userProfileButton").style.display = "none";
+  document.querySelector("#createNode").style.display = "none";
+  document.querySelector("#profile").style.display = "none";
 }; // maybe this renders the user profile and from there the info is shown and these options are available
 // this will be rendered on a button click similar to that of moreInfo, it will 
 
@@ -150,24 +241,22 @@ var NodeInfo = function NodeInfo(_ref2) {
   var account = _ref2.account;
   return (/*#__PURE__*/React.createElement("div", {
       className: "nodeInfo"
-    }, /*#__PURE__*/React.createElement("h2", {
-      className: "nodeName"
-    }, account.name), /*#__PURE__*/React.createElement("img", {
+    }, /*#__PURE__*/React.createElement("img", {
       src: "/assets/img/steamIcon.png",
-      alt: "infoNodeImage",
-      className: "infoNodeImage"
-    }), /*#__PURE__*/React.createElement("h3", {
-      className: "username"
+      alt: "nodeImg",
+      className: "nodeImg"
+    }), /*#__PURE__*/React.createElement("h1", {
+      className: "nodeName"
+    }, account.name), /*#__PURE__*/React.createElement("h3", {
+      className: "nodeUsername"
     }, " Username:", account.username, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "password"
+      className: "nodePassword"
     }, " Password:", account.password, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "email"
-    }, " Email:", account.email, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "image"
-    }, " image:", account.image, " "), /*#__PURE__*/React.createElement("input", {
-      className: "closeButton",
+      className: "nodeEmail"
+    }, " Email:", account.email, " "), /*#__PURE__*/React.createElement("input", {
+      className: "nodeClose",
       type: "button",
-      value: "Close",
+      value: "X",
       onClick: loadAccountsFromServer
     }))
   );
@@ -215,7 +304,8 @@ var loadAccountsFromServer = function loadAccountsFromServer() {
       accounts: data.accounts
     }), document.querySelector("#nodes"));
   });
-  document.querySelector("#createNode").style.display = "block"; // document.querySelector("userProfileButton").style.display = "block";
+  document.querySelector("#createNode").style.display = "block";
+  document.querySelector("#profile").style.display = "block";
 };
 
 var loadAccount = function loadAccount() {
@@ -223,10 +313,8 @@ var loadAccount = function loadAccount() {
     ReactDOM.render( /*#__PURE__*/React.createElement(Profile, {
       account: account
     }), document.querySelector("#profile"));
-    document.querySelector("#profile").style.display = "none";
   });
-}; // will be similar probably
-
+};
 
 var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(AccountForm, {
