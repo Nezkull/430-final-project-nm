@@ -142,20 +142,23 @@ const changePassword = (request, response) => {
 });
 */
 
-// maybe make a getAccount function
-
+// maybe make a getAccount function, it kinda works but at the same time not really for some reason
 const getAccount = (request, response) => {
     const req = request;
     const res = response;
     
     const accountJSON = {
-        
         username: req.session.account.username,
-//        _id: req.session.account._id,
+        id: req.session.account._id,
     };
     
     res.json(accountJSON);
-}
+   
+    
+    // const tempAccount = { Account.AccountModel.findByUsername(req.session.account.username) };
+    
+   //  res.json(tempAccount);
+};
 
 
 const getToken = (request, response) => {

@@ -20,8 +20,6 @@ const makeNode = (req, res) => {
 
   const nodeData = {
     name: req.body.name,
-    age: req.body.age,
-    level: req.body.level,
     username: req.body.username,
     password: req.body.password,
     email: req.body.email,

@@ -114,11 +114,7 @@ var UserAccount = function UserAccount(account) {
       className: "userSettings"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "profileUsername"
-    }, account.username), /*#__PURE__*/React.createElement("h2", {
-      className: "profilePassword"
-    }, account.password), /*#__PURE__*/React.createElement("h2", {
-      className: "profile_id"
-    }, account._id), /*#__PURE__*/React.createElement("input", {
+    }, account.username), /*#__PURE__*/React.createElement("input", {
       className: "changePass",
       type: "button",
       value: "Change Password",

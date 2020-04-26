@@ -75,8 +75,6 @@ const UserAccount = (account) => {
     return (
         <div className="userSettings">
             <h2 className="profileUsername">{account.username}</h2>
-            <h2 className="profilePassword">{account.password}</h2>
-            <h2 className="profile_id">{account._id}</h2>
             <input className="changePass" type="button" value="Change Password" onClick={testFunc}/>
             <input className="premium" type="button" value="Get Premium" onClick={testFunc}/>
             <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
