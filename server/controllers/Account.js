@@ -11,19 +11,23 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+/*
 const userPage = (req, res) => {
-    // res.render('/userAccount', {csrfToken: req.csrfToken() });
-    res.render('userAccount');
+  res.render('userAccount');
 };
+*/
 
-const userAccount =(request, response) => {
+// this is useless
+/*
+const userAccount = (request, response) => {
   const req = request;
   const res = response;
 
   req.session.account = Account.AccountModel.toAPI(account);
-    
+
   return res.json({ redirect: '/userAccount' });
 };
+*/
 
 const login = (request, response) => {
   const req = request;
@@ -92,7 +96,7 @@ const signup = (request, response) => {
 };
 
 /*
-const updatePassword = (request, response) => {
+const changePassword = (request, response) => {
   const req = request;
   const res = response;
 
@@ -108,13 +112,50 @@ const updatePassword = (request, response) => {
     return res.status(400).json({ error: 'New passwords do not match' });
   }
 
-  return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
+  return Account.AccountModel.authenticate(username, password, (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'Wrong username or password' });
+    }
+
+    return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
     // look into findOneAndUpdate or updateOne more for this I think
     // don't ned to make a new one entirely
+      const updatedAccount = account;
+      updatedAccount.salt = salt;
+      updatedAccount.password = hash;
+
+      const updatedPromise = updatedAccount.save();
+
+      updatedPromise.then(() => {
+          req.session.account = Account.AccountModel.toAPI(updatedAccount);
+            return res.json({ redirect: '/maker' });
+      });
+
+      updatedPromise.catch((err) => {
+          if (err.code === 11000) {
+        return res.status(400).json({ error: 'Username already in use.' });
+      }
+
+      return res.status(400).json({ error: 'An error occurred' });
+      });
   });
-};
+});
 */
 
+// maybe make a getAccount function
+
+const getAccount = (request, response) => {
+    const req = request;
+    const res = response;
+    
+    const accountJSON = {
+        
+        username: req.session.account.username,
+//        _id: req.session.account._id,
+    };
+    
+    res.json(accountJSON);
+}
 
 
 const getToken = (request, response) => {
@@ -133,5 +174,7 @@ module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
-module.exports.userAccount = userAccount;
-module.exports.userPage = userPage;
+module.exports.getAccount = getAccount;
+// module.exports.userAccount = userAccount;
+// module.exports.userPage = userPage;
+// module.exports.changePassword = changePassword;

@@ -12,7 +12,16 @@ const handleAccount = (e) => {
     
     return false;
 };
-
+/*
+const UserAccount = (props) => {
+    return (
+        <div className="nodeInfo">
+            <h3 className="username"> Username:{props.username} </h3>
+            <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
+        </div>
+    );
+};
+*/
 const AccountForm = (props) => {
     return (
         <form id="accountForm"
@@ -41,6 +50,40 @@ const AccountForm = (props) => {
     );
 };
 
+const Profile = (account) => {
+    return (
+        <input className="userProfile" type="button" value="Profile Settings" onClick={(e) => userProfile(account, e)}></input>
+    );
+};
+
+const userProfile =(account, e) => {
+    e.preventDefault();
+    ReactDOM.render(
+        <UserAccount account={account} />, document.querySelector("#nodes")
+    );
+    document.querySelector("#createNode").style.display = "none";
+};
+
+// maybe this renders the user profile and from there the info is shown and these options are available
+// this will be rendered on a button click similar to that of moreInfo, it will 
+const UserAccount = (account) => {
+    console.dir(account);
+    console.log(account.account['username']);
+    // const temp = JSON.parse(props);
+    // <h2 className="profileUsername">{props.username}</h2>
+    // <h2 className="profilePassword">{props.password}</h2>
+    return (
+        <div className="userSettings">
+            <h2 className="profileUsername">{account.username}</h2>
+            <h2 className="profilePassword">{account.password}</h2>
+            <h2 className="profile_id">{account._id}</h2>
+            <input className="changePass" type="button" value="Change Password" onClick={testFunc}/>
+            <input className="premium" type="button" value="Get Premium" onClick={testFunc}/>
+            <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
+        </div>
+    );
+};
+
 // I'm planning on using this to load different account submission forms, email or other. OR do something entirely different with this
 const testFunc = (e) => {
   e.preventDefault();
@@ -53,14 +96,12 @@ const testFunc = (e) => {
 // will add another button to the form, this will allow user to edit content
 const accountInfo = (account, e) => {
     e.preventDefault();
-    console.log("Name: " + account.name + "Email: " + account.email);
     ReactDOM.render(
         <NodeInfo account={account} />, document.querySelector("#nodes")
     );
 };
 
 const NodeInfo = ({account}) => {
-    console.log("Name: " + account.name + "Email: " + account.email);
     return (
         <div className="nodeInfo">
             <h2 className="nodeName">{account.name}</h2>
@@ -82,7 +123,7 @@ const AccountList = function(props) {
             </div>
         );
     }
-    
+    /**/
     const accountNodes = props.accounts.map(function(account) {
         return (
             <div key={account._id} className="account" onClick={(e) => accountInfo(account, e)}>
@@ -105,6 +146,16 @@ const loadAccountsFromServer = () => {
             <AccountList accounts={data.accounts} />, document.querySelector("#nodes")
         );
     });
+    
+    document.querySelector("#createNode").style.display = "block";
+};
+
+const loadAccount = () => {
+    sendAjax('GET', '/getAccount', null, (account) => {
+        ReactDOM.render(
+            <Profile account={account}/>, document.querySelector("#profile")
+        );
+    });
 };
 
 // will be similar probably
@@ -117,10 +168,13 @@ const setup = function(csrf) {
         <AccountList accounts={[]} />, document.querySelector("#nodes")
     );
     
+    loadAccount();
+    
     loadAccountsFromServer();
 };
 
 const getToken = () => {
+    
     sendAjax('GET', '/getToken', null, (result) => {
         setup(result.csrfToken);
     });
