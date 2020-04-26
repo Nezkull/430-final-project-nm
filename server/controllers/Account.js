@@ -138,6 +138,7 @@ const changePassword = (request, response) => {
 };
 
 // premium account upgrade code
+/*
 const premiumMember = (request, response) => {
   const req = request;
   const res = response;
@@ -154,6 +155,7 @@ const premiumMember = (request, response) => {
 
   // return res.status(400).json({ error: ' An error occurred'});
 };
+*/
 
 // maybe make a getAccount function, it kinda works but at the same time not really for some reason
 const getAccount = (request, response) => {
@@ -191,6 +193,6 @@ module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.getAccount = getAccount;
 module.exports.changePassword = changePassword;
-module.exports.premiumMember = premiumMember;
+// module.exports.premiumMember = premiumMember;
 // module.exports.userAccount = userAccount;
 // module.exports.userPage = userPage;
