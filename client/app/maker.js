@@ -52,7 +52,7 @@ const AccountForm = (props) => {
 
 const Profile = (account) => {
     return (
-        <input className="userProfile" type="button" value="Profile Settings" onClick={(e) => userProfile(account, e)}></input>
+        <input className="userProfileButton" type="button" value="Profile Settings" onClick={(e) => userProfile(account, e)}></input>
     );
 };
 
@@ -62,19 +62,17 @@ const userProfile =(account, e) => {
         <UserAccount account={account} />, document.querySelector("#nodes")
     );
     document.querySelector("#createNode").style.display = "none";
+    // document.querySelector("userProfileButton").style.display = "none";
 };
 
 // maybe this renders the user profile and from there the info is shown and these options are available
 // this will be rendered on a button click similar to that of moreInfo, it will 
-const UserAccount = (account) => {
+const UserAccount = ({account}) => {
     console.dir(account);
-    console.log(account.account['username']);
-    // const temp = JSON.parse(props);
-    // <h2 className="profileUsername">{props.username}</h2>
-    // <h2 className="profilePassword">{props.password}</h2>
+    
     return (
         <div className="userSettings">
-            <h2 className="profileUsername">{account.username}</h2>
+            <h2 className="profileUsername">{account.csrfToken}</h2>
             <input className="changePass" type="button" value="Change Password" onClick={testFunc}/>
             <input className="premium" type="button" value="Get Premium" onClick={testFunc}/>
             <input className="closeButton" type="button" value="Close" onClick={loadAccountsFromServer}/>
@@ -125,8 +123,8 @@ const AccountList = function(props) {
     const accountNodes = props.accounts.map(function(account) {
         return (
             <div key={account._id} className="account" onClick={(e) => accountInfo(account, e)}>
+                <h3 className="accountName"> Account Name:{account.name} </h3>
                 <img src="/assets/img/steamIcon.png" alt="steamIcon" className="nodeImage" height="300" width="300"/>
-                <h3 className="accountName"> Name:{account.name} </h3>
             </div>
         );
     });
@@ -146,6 +144,7 @@ const loadAccountsFromServer = () => {
     });
     
     document.querySelector("#createNode").style.display = "block";
+    // document.querySelector("userProfileButton").style.display = "block";
 };
 
 const loadAccount = () => {
@@ -153,6 +152,8 @@ const loadAccount = () => {
         ReactDOM.render(
             <Profile account={account}/>, document.querySelector("#profile")
         );
+        
+        document.querySelector("#profile").style.display = "none";
     });
 };
 

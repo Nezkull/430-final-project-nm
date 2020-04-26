@@ -95,11 +95,13 @@ const signup = (request, response) => {
   });
 };
 
+// change password code
 /*
 const changePassword = (request, response) => {
   const req = request;
   const res = response;
 
+  // i guess i cna get away with only haveing one new password value
   req.body.pass = `${req.body.pass}`;
   req.body.newPass1 = `${req.body.newPass1}`;
   req.body.newPass2 = `${req.body.newPass2}`;
@@ -134,30 +136,49 @@ const changePassword = (request, response) => {
       updatedPromise.catch((err) => {
           if (err.code === 11000) {
         return res.status(400).json({ error: 'Username already in use.' });
-      }
-
-      return res.status(400).json({ error: 'An error occurred' });
+      };
       });
   });
 });
 */
 
-// maybe make a getAccount function, it kinda works but at the same time not really for some reason
-const getAccount = (request, response) => {
+// premium account upgrade code
+/*
+const premiumMember = (request, response) => {
     const req = request;
     const res = response;
-    
-    const accountJSON = {
-        username: req.session.account.username,
-        id: req.session.account._id,
+
+    const userAccount = Account.AccountModel.findByUsername(req.session.account.username);
+
+    userAccount.then((account) => {
+        const updatedAccount = account;
+        updatedAccount.premiumMem = true;
+        updatedAccount.save();
+
+    });
+
+    userAccount.catch((err) => {
+        return res.status(400).json({ error: ' An error occurred'});
+    });
+
+    return res.status(400).json({ error: ' An error occurred'});
+};
+*/
+// maybe make a getAccount function, it kinda works but at the same time not really for some reason
+const getAccount = (request, response) => {
+  const req = request;
+  const res = response;
+
+  Account.AccountModel.findByUsername(req.session.account.username).then((account) => {
+    const accountInfo = {
+      username: account.username,
+      id: account._id,
+      password: account.password,
+      premiumMem: account.premiumMem,
     };
-    
-    res.json(accountJSON);
-   
-    
-    // const tempAccount = { Account.AccountModel.findByUsername(req.session.account.username) };
-    
-   //  res.json(tempAccount);
+
+    res.json(accountInfo);
+  });
 };
 
 

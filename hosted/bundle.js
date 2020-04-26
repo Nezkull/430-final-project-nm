@@ -84,7 +84,7 @@ var AccountForm = function AccountForm(props) {
 
 var Profile = function Profile(account) {
   return (/*#__PURE__*/React.createElement("input", {
-      className: "userProfile",
+      className: "userProfileButton",
       type: "button",
       value: "Profile Settings",
       onClick: function onClick(e) {
@@ -99,22 +99,19 @@ var userProfile = function userProfile(account, e) {
   ReactDOM.render( /*#__PURE__*/React.createElement(UserAccount, {
     account: account
   }), document.querySelector("#nodes"));
-  document.querySelector("#createNode").style.display = "none";
+  document.querySelector("#createNode").style.display = "none"; // document.querySelector("userProfileButton").style.display = "none";
 }; // maybe this renders the user profile and from there the info is shown and these options are available
 // this will be rendered on a button click similar to that of moreInfo, it will 
 
 
-var UserAccount = function UserAccount(account) {
+var UserAccount = function UserAccount(_ref) {
+  var account = _ref.account;
   console.dir(account);
-  console.log(account.account['username']); // const temp = JSON.parse(props);
-  // <h2 className="profileUsername">{props.username}</h2>
-  // <h2 className="profilePassword">{props.password}</h2>
-
   return (/*#__PURE__*/React.createElement("div", {
       className: "userSettings"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "profileUsername"
-    }, account.username), /*#__PURE__*/React.createElement("input", {
+    }, account.csrfToken), /*#__PURE__*/React.createElement("input", {
       className: "changePass",
       type: "button",
       value: "Change Password",
@@ -149,8 +146,8 @@ var accountInfo = function accountInfo(account, e) {
   }), document.querySelector("#nodes"));
 };
 
-var NodeInfo = function NodeInfo(_ref) {
-  var account = _ref.account;
+var NodeInfo = function NodeInfo(_ref2) {
+  var account = _ref2.account;
   return (/*#__PURE__*/React.createElement("div", {
       className: "nodeInfo"
     }, /*#__PURE__*/React.createElement("h2", {
@@ -195,15 +192,15 @@ var AccountList = function AccountList(props) {
         onClick: function onClick(e) {
           return accountInfo(account, e);
         }
-      }, /*#__PURE__*/React.createElement("img", {
+      }, /*#__PURE__*/React.createElement("h3", {
+        className: "accountName"
+      }, " Account Name:", account.name, " "), /*#__PURE__*/React.createElement("img", {
         src: "/assets/img/steamIcon.png",
         alt: "steamIcon",
         className: "nodeImage",
         height: "300",
         width: "300"
-      }), /*#__PURE__*/React.createElement("h3", {
-        className: "accountName"
-      }, " Name:", account.name, " "))
+      }))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {
@@ -218,7 +215,7 @@ var loadAccountsFromServer = function loadAccountsFromServer() {
       accounts: data.accounts
     }), document.querySelector("#nodes"));
   });
-  document.querySelector("#createNode").style.display = "block";
+  document.querySelector("#createNode").style.display = "block"; // document.querySelector("userProfileButton").style.display = "block";
 };
 
 var loadAccount = function loadAccount() {
@@ -226,6 +223,7 @@ var loadAccount = function loadAccount() {
     ReactDOM.render( /*#__PURE__*/React.createElement(Profile, {
       account: account
     }), document.querySelector("#profile"));
+    document.querySelector("#profile").style.display = "none";
   });
 }; // will be similar probably
 

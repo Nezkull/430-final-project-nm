@@ -28,6 +28,10 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  premiumMem: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 AccountSchema.statics.toAPI = (doc) => ({
