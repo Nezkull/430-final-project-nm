@@ -154,7 +154,7 @@ $(document).ready(function () {
 });
 "use strict";
 
-// not sure if ill need this, probably won't
+// not sure if ill need this, probably won't, actually will
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
   $("#message").animate({

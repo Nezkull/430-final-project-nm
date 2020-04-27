@@ -11,23 +11,19 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
-/*
-const userPage = (req, res) => {
-  res.render('userAccount');
+const profilePage = (req, res) => {
+  Account.AccountModel.findByUsername(req.session.account.username, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'ERROR!' });
+    }
+    console.dir(req.session.account);
+    console.log(docs);
+    return res.render('profile', {
+      csrfToken: req.csrfToken(),
+      profile: req.session.account,
+    });
+  });
 };
-*/
-
-// this is useless
-/*
-const userAccount = (request, response) => {
-  const req = request;
-  const res = response;
-
-  req.session.account = Account.AccountModel.toAPI(account);
-
-  return res.json({ redirect: '/userAccount' });
-};
-*/
 
 const login = (request, response) => {
   const req = request;
@@ -96,14 +92,10 @@ const signup = (request, response) => {
 };
 
 // change password code
-
-const changePassword = (request, response) => {
+const passwordChange = (request, response) => {
   const req = request;
   const res = response;
 
-  // i guess i cna get away with only haveing one new password value, if i do the username check,
-  // it might allow someone to change someone elses password, maybe?
-  // req.body.username = `${req.body.username}`;
   req.body.pass = `${req.body.pass}`;
   req.body.newPass1 = `${req.body.newPass1}`;
 
@@ -118,27 +110,24 @@ const changePassword = (request, response) => {
       }
 
       return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
-        // look into findOneAndUpdate or updateOne more for this I think
-        // don't ned to make a new one entirely
-        const updatedAccount = account;
-        updatedAccount.salt = salt;
-        updatedAccount.password = hash;
+        const updatedAccount = {
+          username: req.body.username,
+          salt,
+          password: hash,
+        };
 
-        const updatedPromise = updatedAccount.save();
-
-        updatedPromise.then(() => {
-          req.session.account = Account.AccountModel.toAPI(updatedAccount);
-          // the return line ill need to be changed later to redirect back to the profile page
-          return res.json({ redirect: '/maker' });
-        });
-
-        updatedPromise.catch(() => res.status(400).json({ error: 'Something went wrong.' }));
+        Account.AccountModel.collection.replaceOne(req.body.username, updatedAccount);
+          
+          console.log("Pass changed");
+          
+        return res.status(200).json({ message: 'You have changed passwords' });
       });
     });
 };
 
+// not sure if i am going to go with this or go with ads instead
 // premium account upgrade code
-/*
+
 const premiumMember = (request, response) => {
   const req = request;
   const res = response;
@@ -152,12 +141,13 @@ const premiumMember = (request, response) => {
   });
 
   userAccount.catch(() => res.status(400).json({ error: ' An error occurred' }));
-
-  // return res.status(400).json({ error: ' An error occurred'});
 };
-*/
 
-// maybe make a getAccount function, it kinda works but at the same time not really for some reason
+
+const premiumMemPage = (req, res) => {
+    res.render('premium', { csrfToken: req.csrfToken() });
+};
+
 const getAccount = (request, response) => {
   const req = request;
   const res = response;
@@ -168,12 +158,12 @@ const getAccount = (request, response) => {
       id: account._id,
       password: account.password,
       premiumMem: account.premiumMem,
+      createdDate: account.createdDate,
     };
 
     res.json(accountInfo);
   });
 };
-
 
 const getToken = (request, response) => {
   const req = request;
@@ -192,7 +182,6 @@ module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.getAccount = getAccount;
-module.exports.changePassword = changePassword;
+module.exports.passwordChange = passwordChange;
+module.exports.profilePage = profilePage;
 // module.exports.premiumMember = premiumMember;
-// module.exports.userAccount = userAccount;
-// module.exports.userPage = userPage;

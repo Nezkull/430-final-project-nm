@@ -1,4 +1,4 @@
-// not sure if ill need this, probably won't
+// not sure if ill need this, probably won't, actually will
 const handleError = (message) => {
     $("#errorMessage").text(message);
     $("#message").animate({width: 'toggle'}, 350);

@@ -10,10 +10,12 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/maker', mid.requiresLogin, controllers.Node.makerPage);
+
+  // change this to redirect to the accounts page after posting an account
   app.post('/maker', mid.requiresLogin, controllers.Node.make);
-  // app.get('/userAccount', mid.requiresSecure, mid.requiresLogin, controllers.Account.userPage);
-  // app.post('/changePassword', mid.requiresSecure,
-  //   mid.requiresLogin, controllers.Account.changePassword);
+  app.get('/profile', mid.requiresLogin, controllers.Account.profilePage);
+  app.post('/passwordChange', mid.requiresLogin, controllers.Account.passwordChange);
+  app.get('/node', mid.requiresLogin, controllers.Node.nodePage);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

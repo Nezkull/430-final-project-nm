@@ -13,6 +13,17 @@ const makerPage = (req, res) => {
   });
 };
 
+const nodePage = (req, res) => {
+    Node.NodeModel.findByOwner(req.session.account._id, (err, docs) => {
+       if(err) {
+           console.log(err);
+           return res.status(400).json({ error: 'An error occurred'});
+       }
+        
+        return res.render('node', { csrfToken: req.csrfToken(), accounts: docs });
+    });
+}
+
 const makeNode = (req, res) => {
   if (!req.body.name || !req.body.username || !req.body.password) {
     return res.status(400).json({ error: 'Account name, Username, and Password are required.' });
@@ -62,3 +73,4 @@ const getNodes = (request, response) => {
 module.exports.makerPage = makerPage;
 module.exports.getNodes = getNodes;
 module.exports.make = makeNode;
+module.exports.nodePage = nodePage;
