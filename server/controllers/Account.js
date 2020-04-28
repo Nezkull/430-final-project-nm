@@ -133,6 +133,7 @@ const passwordChange = (request, response) => {
 
 // not sure if i am going to go with this or go with ads instead
 // premium account upgrade code
+/*
 const premiumMember = (request, response) => {
   const req = request;
   const res = response;
@@ -147,7 +148,7 @@ const premiumMember = (request, response) => {
 
   userAccount.catch(() => res.status(400).json({ error: ' An error occurred' }));
 };
-
+*/
 const getAccount = (request, response) => {
   const req = request;
   const res = response;
