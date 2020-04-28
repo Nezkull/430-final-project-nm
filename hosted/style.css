@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: #9470ff;
 }
 
 #logo {
@@ -17,7 +18,7 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: #473285;
 }
 
 nav:nth-child(1) {
@@ -38,13 +39,13 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #756a94;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: #a295c9;
 }
 
 .account {
@@ -54,7 +55,13 @@ nav:nth-child(1) {
     margin-left: 8%;
     margin-block-start: auto;
     border: 1px solid black;
+    margin-top: 2%;
+    background-color: #756a94;
 }
+
+.accountName {
+    margin-left: 30%;
+};
 
 .nodeInfo {
     border: 1px solid black;
@@ -68,7 +75,7 @@ nav:nth-child(1) {
     height: 500px;
     width: 500px;
     padding-right: 13%;
-    margin-left: 7%;
+    margin-left: 12%;
     margin-top: 5%;
 }
 
@@ -139,6 +146,8 @@ nav:nth-child(1) {
 .profileClose {
     margin-top: 4%;
 }
+
+
 
 /*
 .domoForm {

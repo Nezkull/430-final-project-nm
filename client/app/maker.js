@@ -18,11 +18,6 @@ const AccountForm = (props) => {
         <form id="accountForm" onSubmit={handleAccount} name="accountForm"
             action="/maker" method="POST" className="accountForm"
         >
-            <select id="image" onChange={testFunc}>
-                <option value="/assets/img/originIcon.jpg">Origin</option>
-                <option value="/assets/img/steamIcon.png">Steam</option>
-                <option value="/assets/img/epicIcon.png">Epic</option>
-            </select>
             <label htmlFor="name">Name: </label>
             <input id="accountName" type="text" name="name" placeholder="Account Name"/>
             <label htmlFor="username">Username: </label>

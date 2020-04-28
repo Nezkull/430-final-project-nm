@@ -99,9 +99,9 @@ const passwordChange = (request, response) => {
   req.body.oldPass = `${req.body.oldPass}`;
   req.body.newPass = `${req.body.newPass}`;
 
-  console.log("Pass" + req.body.oldPass + " NewPass: " + req.body.newPass);
-    
-    
+  console.log(`Pass${req.body.oldPass} NewPass: ${req.body.newPass}`);
+
+
   if (!req.body.oldPass || !req.body.newPass) {
     return res.status(400).json({ error: 'All fields are required' });
   }
@@ -114,9 +114,9 @@ const passwordChange = (request, response) => {
 
       return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
         const updatedAccount = account;
-          
-          updatedAccount.hash = hash;
-          /*
+
+        updatedAccount.hash = hash;
+        /*
           username: req.session.account.username,
           salt,
           password: hash,

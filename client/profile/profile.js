@@ -1,7 +1,7 @@
 const testFunc = (e) => {
   e.preventDefault();
     
-  alert("BORT!");
+  alert("unimplemented");
 };
 
 const loadAccount = () => {

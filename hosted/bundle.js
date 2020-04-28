@@ -22,16 +22,7 @@ var AccountForm = function AccountForm(props) {
       action: "/maker",
       method: "POST",
       className: "accountForm"
-    }, /*#__PURE__*/React.createElement("select", {
-      id: "image",
-      onChange: testFunc
-    }, /*#__PURE__*/React.createElement("option", {
-      value: "/assets/img/originIcon.jpg"
-    }, "Origin"), /*#__PURE__*/React.createElement("option", {
-      value: "/assets/img/steamIcon.png"
-    }, "Steam"), /*#__PURE__*/React.createElement("option", {
-      value: "/assets/img/epicIcon.png"
-    }, "Epic")), /*#__PURE__*/React.createElement("label", {
+    }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "name"
     }, "Name: "), /*#__PURE__*/React.createElement("input", {
       id: "accountName",
