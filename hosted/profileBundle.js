@@ -2,7 +2,7 @@
 
 var testFunc = function testFunc(e) {
   e.preventDefault();
-  alert("BORT!");
+  alert("unimplemented");
 };
 
 var loadAccount = function loadAccount() {
