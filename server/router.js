@@ -14,7 +14,7 @@ const router = (app) => {
   // change this to redirect to the accounts page after posting an account
   app.post('/maker', mid.requiresLogin, controllers.Node.make);
   app.get('/profile', mid.requiresLogin, controllers.Account.profilePage);
-  app.post('/passwordChange', mid.requiresLogin, controllers.Account.passwordChange);
+  app.post('/passwordChange', mid.requiresLogin, mid.requiresSecure, controllers.Account.passwordChange);
   app.get('/node', mid.requiresLogin, controllers.Node.nodePage);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

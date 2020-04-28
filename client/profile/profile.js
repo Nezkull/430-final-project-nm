@@ -19,7 +19,7 @@ const UserAccount = ({account}) => {
         <div className="userSettings">
             <h2 className="profileUsername">{account.username}</h2>
             <h2 className="profileDate">{account.createdDate}</h2>
-            <input className="changePass" type="button" value="Change Password" onClick={getToken}/>
+            <input className="changePass" type="button" value="Change Password" onClick={loadPasswordChangeForm}/>
             <input className="premium" type="button" value="Get Premium" onClick={testFunc}/>
         </div>
     );
@@ -51,7 +51,8 @@ const loadPremiumForm = () => {
 const handlePasswordChange = (e) => {
     e.preventDefault();
     
-    if($("#username").val() == '' || $("#oldPass").val() == '' || $("#newPass").val() == ''){
+    // if($("#username").val() == '' || $("#oldPass").val() == '' || $("#newPass").val() == ''){
+    if($("#oldPass").val() == '' || $("#newPass").val() == ''){
         handleError("all fileds are required.");
         return false;
     } else if($("#oldPass").val() === $("#newPass").val()){
@@ -59,7 +60,7 @@ const handlePasswordChange = (e) => {
         return false;
     }
     
-    sendAjax('POST', $("#passwordChange").attr("action"), $("#passwordChange").serialize(), redirect);
+    sendAjax('POST', $("#passwordChangeForm").attr("action"), $("#passwordChangeForm").serialize(), redirect);
     
     loadAccount();
     
@@ -83,14 +84,12 @@ const PasswordChangeForm = (props) => {
 };
 
 const setup = function(csrf) {
-    
-    console.log("CSRF: " + csrf)
     ReactDOM.render(
         <PasswordChangeForm csrf={csrf} />,  document.querySelector("#app")
     );
 };
 
-const getToken = () => {
+const loadPasswordChangeForm = () => {
     
     sendAjax('GET', '/getToken', null, (result) => {
         setup(result.csrfToken);
