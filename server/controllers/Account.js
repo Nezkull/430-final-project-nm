@@ -96,38 +96,43 @@ const passwordChange = (request, response) => {
   const req = request;
   const res = response;
 
-  req.body.pass = `${req.body.pass}`;
-  req.body.newPass1 = `${req.body.newPass1}`;
+  req.body.oldPass = `${req.body.oldPass}`;
+  req.body.newPass = `${req.body.newPass}`;
 
-  if (!req.body.pass || !req.body.newPass1) {
+  console.log("Pass" + req.body.oldPass + " NewPass: " + req.body.newPass);
+    
+    
+  if (!req.body.oldPass || !req.body.newPass) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
   return Account.AccountModel.authenticate(req.session.account.username,
-    req.body.pass, (err, account) => {
+    req.body.oldPass, (err, account) => {
       if (err || !account) {
         return res.status(401).json({ error: 'Wrong username or password' });
       }
 
-      return Account.AccountModel.generateHash(req.body.newPass1, (salt, hash) => {
-        const updatedAccount = {
-          username: req.body.username,
+      return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
+        const updatedAccount = account;
+          
+          updatedAccount.hash = hash;
+          /*
+          username: req.session.account.username,
           salt,
           password: hash,
-        };
+        */
 
-        Account.AccountModel.collection.replaceOne(req.body.username, updatedAccount);
-          
-          console.log("Pass changed");
-          
-        return res.status(200).json({ message: 'You have changed passwords' });
+        Account.AccountModel.collection.replaceOne(req.session.account.username, updatedAccount);
+
+        console.log('Pass changed');
+
+        res.status(200).json({ message: 'You have changed passwords' });
       });
     });
 };
 
 // not sure if i am going to go with this or go with ads instead
 // premium account upgrade code
-
 const premiumMember = (request, response) => {
   const req = request;
   const res = response;
@@ -141,11 +146,6 @@ const premiumMember = (request, response) => {
   });
 
   userAccount.catch(() => res.status(400).json({ error: ' An error occurred' }));
-};
-
-
-const premiumMemPage = (req, res) => {
-    res.render('premium', { csrfToken: req.csrfToken() });
 };
 
 const getAccount = (request, response) => {
@@ -164,6 +164,7 @@ const getAccount = (request, response) => {
     res.json(accountInfo);
   });
 };
+
 
 const getToken = (request, response) => {
   const req = request;

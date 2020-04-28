@@ -14,15 +14,15 @@ const makerPage = (req, res) => {
 };
 
 const nodePage = (req, res) => {
-    Node.NodeModel.findByOwner(req.session.account._id, (err, docs) => {
-       if(err) {
-           console.log(err);
-           return res.status(400).json({ error: 'An error occurred'});
-       }
-        
-        return res.render('node', { csrfToken: req.csrfToken(), accounts: docs });
-    });
-}
+  Node.NodeModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.render('node', { csrfToken: req.csrfToken(), accounts: docs });
+  });
+};
 
 const makeNode = (req, res) => {
   if (!req.body.name || !req.body.username || !req.body.password) {
